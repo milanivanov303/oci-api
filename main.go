@@ -30,7 +30,7 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 
-	server, err := NewAPIServer(":3000", configuration)
+	server, err := NewAPIServer(":4000", configuration)
     if err != nil {
 		fmt.Println("Error creating APIServer:", err)
 		return

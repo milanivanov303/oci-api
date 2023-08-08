@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	//"log"
+	"log"
 	"net/http"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -55,7 +55,7 @@ func (s *APIServer) Run() {
 	// router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
 	// router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccountByID))
 
-	//log.Println("JSON APi server running on port: ", s.listenAddr)
+	log.Println("JSON APi server running on port: ", s.listenAddr)
 
 	http.ListenAndServe(s.listenAddr, router)
 }
