@@ -1,0 +1,12 @@
+{
+    "DB_USERNAME": "gooci",
+    "DB_PASSWORD": "ocigo",
+    "DB_HOST": "127.0.0.1",
+    "DB_PORT": "3309",
+    "DB_DATABASE": "gooci",
+    "tenancy_id" : "ocid1.tenancy.oc1..aaaaaaaaankgta2sk2zpn5fuyhvfrcv5f4xhwldax5qro3vmaz2z2jsbeqga",
+    "user_id" : "ocid1.user.oc1..aaaaaaaaqkqawps75pwugtnd26cbinuwu7pzk3zhivbh4dbm25dez7zrwf4a",
+    "fingerprint_path" : "fingerprint.txt",
+    "private_key_path" : "private_key.pem",
+    "region" : "eu-frankfurt-1"
+}
