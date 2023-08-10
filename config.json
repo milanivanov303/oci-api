@@ -1,0 +1,13 @@
+{
+    "DB_USERNAME": "gooci",
+    "DB_PASSWORD": "ocigo",
+    "DB_HOST": "127.0.0.1",
+    "DB_PORT": "3309",
+    "DB_DATABASE": "gooci",
+    "tenancy_id" : "xxxx",
+    "user_id" : "xxxx",
+    "fingerprint_path" : "fingerprint.txt",
+    "private_key_path" : "private_key.pem",
+    "region" : "xxxx1",
+    "jwt_secret" : "xxxx"
+}
