@@ -55,7 +55,7 @@ func (s *APIServer) Run() {
 
 	router.HandleFunc("/compartments", withJWTAuth(makeHTTPHandleFunc(s.handleCompartments), s.configuration))
 	router.HandleFunc("/instances/{compartment_id}", withJWTAuth(makeHTTPHandleFunc(s.handleInstances), s.configuration))
-	//router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
+	// router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
 	// router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccountByID))
 
 	log.Println("JSON APi server running on port: ", s.listenAddr)
@@ -231,8 +231,9 @@ func makeHTTPHandleFunc(f apiFunc) http.HandlerFunc {
 
 func createJWT(account *Account) (string, error) {
 	claims := &jwt.MapClaims{
-		"expiresAt": 9999999999,
-		"user": "ea_auto",
+		"expiresAt" : 9999999999,
+		"type"      : "auth",
+		"user"      : "ea_auto",
 	}
 
 	secret := "somestupidsecret123"
@@ -262,7 +263,7 @@ func withJWTAuth(handlerFunc http.HandlerFunc, configuration Configuration) http
 		}
 
 		claims := token.Claims.(jwt.MapClaims)
-		if claims["user"] != "ea_auto" {
+		if (claims["user"] != "ea_auto") || (claims["type"] != "auth") {
 			permissionDenied(w)
 			return
 		}
