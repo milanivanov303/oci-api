@@ -8,5 +8,6 @@
     "user_id" : "ocid1.user.oc1..aaaaaaaaqkqawps75pwugtnd26cbinuwu7pzk3zhivbh4dbm25dez7zrwf4a",
     "fingerprint_path" : "fingerprint.txt",
     "private_key_path" : "private_key.pem",
-    "region" : "eu-frankfurt-1"
+    "region" : "eu-frankfurt-1",
+    "jwt_secret" : "somestupidsecret123"
 }
