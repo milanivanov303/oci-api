@@ -11,15 +11,17 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/core"
 	"io/ioutil"
 	"context"
+	jwt "github.com/golang-jwt/jwt/v4"
 )
 
 // Server
 type APIServer struct {
-	listenAddr string
-	store      Storage
-	config     common.ConfigurationProvider
-	client     identity.IdentityClient
-	tenancyID  string
+	listenAddr    string
+	store         Storage
+	config        common.ConfigurationProvider
+	client        identity.IdentityClient
+	tenancyID     string
+	configuration Configuration
 }
 
 // to implement db add store Storage
@@ -44,15 +46,16 @@ func NewAPIServer(listenAddr string, configuration Configuration) (*APIServer, e
 		config:     config,
 		client:     client,
 		tenancyID:  tenancyID,
+		configuration: configuration,
 	}, nil
 }
 
 func (s *APIServer) Run() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/compartments", makeHTTPHandleFunc(s.handleCompartments))
-	router.HandleFunc("/instances/{compartment_id}", makeHTTPHandleFunc(s.handleInstances))
-	// router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
+	router.HandleFunc("/compartments", withJWTAuth(makeHTTPHandleFunc(s.handleCompartments), s.configuration))
+	router.HandleFunc("/instances/{compartment_id}", withJWTAuth(makeHTTPHandleFunc(s.handleInstances), s.configuration))
+	//router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
 	// router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccountByID))
 
 	log.Println("JSON APi server running on port: ", s.listenAddr)
@@ -190,6 +193,13 @@ func (s *APIServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 		return err
 	}
 
+	// tokenString, err := createJWT(account)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// fmt.Println("JWT token: ", tokenString)
+
 	return WriteJSON(w, http.StatusOK, account)
 }
 
@@ -201,13 +211,14 @@ func (s *APIServer) handleDeleteAccount(w http.ResponseWriter, r *http.Request) 
 func WriteJSON(w http.ResponseWriter, status int, v interface{}) error {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(status)
+
 	return json.NewEncoder(w).Encode(v)
 }
 
 type apiFunc func(http.ResponseWriter, *http.Request) error
 
 type ApiError struct {
-	Error string
+	Error string `json:"error"`
 }
 
 func makeHTTPHandleFunc(f apiFunc) http.HandlerFunc {
@@ -216,4 +227,57 @@ func makeHTTPHandleFunc(f apiFunc) http.HandlerFunc {
 			WriteJSON(w, http.StatusBadRequest, ApiError{Error: err.Error()})
 		}
 	}
+}
+
+func createJWT(account *Account) (string, error) {
+	claims := &jwt.MapClaims{
+		"expiresAt": 9999999999,
+		"user": "ea_auto",
+	}
+
+	secret := "somestupidsecret123"
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	return token.SignedString([]byte(secret))
+}
+
+func permissionDenied(w http.ResponseWriter) {
+	WriteJSON(w, http.StatusForbidden, ApiError{Error: "permission denied"})
+}
+
+func withJWTAuth(handlerFunc http.HandlerFunc, configuration Configuration) http.HandlerFunc {
+	secret := configuration.JWTSecret
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		tokenString := r.Header.Get("x-jwt-token")
+		token, err := validateJWT(tokenString, secret)
+		if err != nil {
+			permissionDenied(w)
+			return
+		}
+
+		if !token.Valid {
+			permissionDenied(w)
+			return
+		}
+
+		claims := token.Claims.(jwt.MapClaims)
+		if claims["user"] != "ea_auto" {
+			permissionDenied(w)
+			return
+		}
+
+		handlerFunc(w, r)
+	}
+}
+
+func validateJWT(tokenString string, secret string) (*jwt.Token, error) {
+	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(secret), nil
+	})
 }

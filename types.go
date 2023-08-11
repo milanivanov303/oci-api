@@ -16,6 +16,7 @@ type Configuration struct {
 	FingerprintPath  string `json:"fingerprint_path"`
 	PrivateKeyPath   string `json:"private_key_path"`
 	Region           string `json:"region"`
+	JWTSecret        string `json:"jwt_secret"`
 }
 
 // type Compartment struct {
