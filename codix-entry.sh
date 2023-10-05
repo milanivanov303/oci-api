@@ -3,6 +3,7 @@
 #
 
 cd /go/oci-api
+git checkout ${BRANCH}
 export PATH=$PATH:/usr/local/go/bin
 make run
 

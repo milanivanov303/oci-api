@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+    oci-api:
+        image: oci-api:1.0
+        ports:
+            - 80
+            - 4000:4000
+        deploy:
+            resources:
+                limits:
+                    cpus: '1'
+                    memory: '1G'
+        environment:
+            - BRANCH=${BRANCH}
