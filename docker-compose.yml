@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
     go:
-        image: oci-api:1.0
+        image: gitlab.codixfr.private:5005/enterpriseapps/oci-api:latest
         ports:
             - 80
             - 4000:4000
