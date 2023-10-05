@@ -1,7 +1,7 @@
 image: gitlab.codixfr.private:5005/enterpriseapps/images/docker:1.4
 
 before_script:
-#  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
 #  - export IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 #  - export IMAGE_TAG=$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
   - export BRANCH=${BRANCH}
