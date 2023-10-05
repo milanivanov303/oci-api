@@ -5,7 +5,7 @@ before_script:
 #  - export IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 #  - export IMAGE_TAG=$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
   - export BRANCH=${BRANCH}
-  
+
 .deploy-script: &deploy-script
   # In order to fix bug with doker version
   - export DOCKER_API_VERSION=1.39
@@ -15,6 +15,8 @@ before_script:
 
   # Deploy new image
   - docker-compose up --build --detach
+  - echo $DEPLOY_HOST
+  - echo $BRANCH
 
   # Register new deploy in proxy
   - export SERVER=$(echo $DEPLOY_HOST | sed "s/http:\/\///g" | sed "s/:[0-9]*//g")
@@ -36,8 +38,6 @@ deploy on dev:
   script:
     - export WEB_PROXY_URL=$WEB_PROXY_URL_DEV
     - export WEB_PROXY_TOKEN=$WEB_PROXY_TOKEN_DEV
-    - echo $BRANCH
-    - echo $DEPLOY_HOST
     - *deploy-script
   only:
     - develop
