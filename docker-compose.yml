@@ -4,7 +4,6 @@ services:
     go:
         image: gitlab.codixfr.private:5005/enterpriseapps/oci-api:latest
         ports:
-            - 80
             - 4000:4000
         deploy:
             resources:
