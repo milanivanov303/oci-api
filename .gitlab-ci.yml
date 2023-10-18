@@ -28,7 +28,8 @@ before_script:
 
   # Register new deploy in proxy
   - export SERVER=$(echo $DEPLOY_HOST | sed "s/http:\/\///g" | sed "s/:[0-9]*//g")
-  - export PORT=$(docker-compose --host $DEPLOY_HOST port go 4000 | sed "s/.*://g")
+  - . .env.dev && export PORT=${API_PORT}
+  # - export PORT=$(docker-compose --host $DEPLOY_HOST port go 4000 | sed "s/.*://g")
   - |
     curl \
     --request POST $WEB_PROXY_URL \
