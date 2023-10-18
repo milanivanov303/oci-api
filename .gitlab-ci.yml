@@ -55,7 +55,7 @@ deploy on prod:
   stage: deploy
   environment: prod
   script:
-    - export IMAGE=$IMAGE_TAG
+    - echo $CI_ENVIRONMENT_NAME
     - export WEB_PROXY_URL=$WEB_PROXY_URL_PROD
     - export WEB_PROXY_TOKEN=$WEB_PROXY_TOKEN_PROD
     - *deploy-script
