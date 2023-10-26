@@ -3,9 +3,13 @@ package main
 import (
 	"math/rand"
 	"time"
+	"github.com/oracle/oci-go-sdk/v65/common"
+	"github.com/oracle/oci-go-sdk/v65/identity"
+	"github.com/oracle/oci-go-sdk/v65/core"
 )
 
 type Configuration struct {
+	AppPort          int    `json:"app_port"`
 	DBUsername       string `json:"DB_USERNAME"`
 	DBPassword       string `json:"DB_PASSWORD"`
 	DBHost           string `json:"DB_HOST"`
@@ -15,15 +19,19 @@ type Configuration struct {
 	UserID           string `json:"user_id"`
 	FingerprintPath  string `json:"fingerprint_path"`
 	PrivateKeyPath   string `json:"private_key_path"`
-	Region           string `json:"region"`
+	HomeRegion       string `json:"home_region"`
 	JWTSecret        string `json:"jwt_secret"`
 }
 
-// type Compartment struct {
-//     Name      string `json:"name"`
-//     OCID      string `json:"ocid"`
-//     Lifecycle string `json:"lifecycleState"`
-// }
+type APIServer struct {
+	ListenAddr     string
+	Store          Storage
+	Config         common.ConfigurationProvider
+	IdentityClient identity.IdentityClient
+	ComputeClients []core.ComputeClient
+	TenancyID      string
+	Configuration  Configuration
+}
 
 type CreateAccountRequest struct {
 	FirstName string `json:"firstName"`
