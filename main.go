@@ -30,7 +30,8 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 
-	server, err := NewAPIServer(":4000", configuration)
+	port := fmt.Sprintf("%s%d", ":", configuration.AppPort)
+	server, err := NewAPIServer(port, configuration)
     if err != nil {
 		fmt.Println("Error creating APIServer:", err)
 		return
