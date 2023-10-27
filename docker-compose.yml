@@ -4,7 +4,7 @@ services:
     go:
         image: gitlab.codixfr.private:5005/enterpriseapps/images/go-api:latest
         ports:
-            - ${API_PORT:-4000}:4000
+            - ${API_PORT:-4000}:${APP_PORT:-4000}
         deploy:
             resources:
                 limits:

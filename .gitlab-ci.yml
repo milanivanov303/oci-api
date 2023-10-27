@@ -10,6 +10,7 @@ before_script:
   - |
     vault kv get -format=json kv/oci-api | jq '.["data"]["data"]' > data.json
     jq 'del(.private_key_content)' data.json > config.json
+    app_port=$(jq '.app_port' data.json) && export APP_PORT=$app_port
     key=$(jq '.private_key_content' data.json)
     echo -e $key | tr -d '"' | sed '${/^$/d}' > private_key.pem
     rm data.json
