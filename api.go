@@ -67,6 +67,13 @@ func (s *APIServer) Run() {
 	router.HandleFunc("/compartments", withJWTAuth(makeHTTPHandleFunc(s.handleCompartments), s.Configuration))
 	router.HandleFunc("/instances/{compartment_id}", withJWTAuth(makeHTTPHandleFunc(s.handleInstances), s.Configuration))
 	router.HandleFunc("/regions", withJWTAuth(makeHTTPHandleFunc(s.handleRegions), s.Configuration))
+	router.HandleFunc("/policies", withJWTAuth(makeHTTPHandleFunc(s.handlePolicies), s.Configuration))
+	router.HandleFunc("/users", withJWTAuth(makeHTTPHandleFunc(s.handleUsers), s.Configuration))
+	router.HandleFunc("/api-keys", withJWTAuth(makeHTTPHandleFunc(s.handleApiKeys), s.Configuration))
+	router.HandleFunc("/auth-tokens", withJWTAuth(makeHTTPHandleFunc(s.handleAuthTokens), s.Configuration))
+	router.HandleFunc("/smtp-creds", withJWTAuth(makeHTTPHandleFunc(s.handleSmtpCredentials), s.Configuration))
+	router.HandleFunc("/groups", withJWTAuth(makeHTTPHandleFunc(s.handleGroups), s.Configuration))
+	router.HandleFunc("/dynamic-groups", withJWTAuth(makeHTTPHandleFunc(s.handleDynamicGroups), s.Configuration))
 	// router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
 	// router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccountByID))
 
