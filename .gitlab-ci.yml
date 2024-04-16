@@ -24,8 +24,8 @@ before_script:
 
   # Deploy new image
   - docker-compose up --build --detach --force-recreate
-  - docker --host $DEPLOY_HOST cp config.json oci-api-$CI_ENVIRONMENT_NAME-go-1:/go/
-  - docker --host $DEPLOY_HOST cp private_key.pem oci-api-$CI_ENVIRONMENT_NAME-go-1:/go/
+  - docker --host $DEPLOY_HOST cp config.json oci-api-$CI_ENVIRONMENT_NAME-go-2-1:/go/
+  - docker --host $DEPLOY_HOST cp private_key.pem oci-api-$CI_ENVIRONMENT_NAME-go-2-1:/go/
 
   # Register new deploy in proxy
   - export SERVER=$(echo $DEPLOY_HOST | sed "s/http:\/\///g" | sed "s/:[0-9]*//g")
